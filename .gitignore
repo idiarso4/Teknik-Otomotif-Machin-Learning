@@ -1,0 +1,95 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+prisma/dev.db*
+/lib/generated/prisma
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+.tsbuildinfo
+
+# AI/ML related
+models/
+*.pkl
+*.joblib
+*.h5
+*.pb
+*.onnx
+training_data/
+datasets/
+checkpoints/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Config files that might contain sensitive data
+.config/
+
+# Build outputs
+*.tgz
+*.tar.gz
+
+# Testing
+.nyc_output/
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Misc
+*.tgz
+*.tar.gz

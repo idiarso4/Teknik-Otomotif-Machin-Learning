@@ -1,0 +1,72 @@
+// Schema database untuk Aplikasi Simulasi AI Otomotif
+// SMK Negeri 1 Punggelan
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Model untuk data sensor otomotif
+model SensorReading {
+  id               Int      @id @default(autoincrement())
+  engineTemp       Float    // Suhu mesin (°C)
+  oilPressure      Float    // Tekanan oli (bar)
+  batteryVoltage   Float    // Tegangan baterai (V)
+  engineVibration  Float    // Getaran mesin (Hz)
+  rpm              Int      // RPM mesin
+  timestamp        DateTime @default(now())
+  
+  @@map("sensor_readings")
+}
+
+// Model untuk hasil deteksi AI
+model AIDetection {
+  id             Int      @id @default(autoincrement())
+  parameter      String   // Parameter yang dianalisis
+  confidence     Float    // Tingkat kepercayaan (0-1)
+  status         String   // normal, warning, critical
+  recommendation String   // Rekomendasi perbaikan
+  timestamp      DateTime @default(now())
+  
+  @@map("ai_detections")
+}
+
+// Model untuk progress pembelajaran siswa
+model UserProgress {
+  id                    Int      @id @default(autoincrement())
+  moduleId              String   // ID modul pembelajaran
+  userSession           String   // Session ID pengguna
+  completionPercentage  Float    // Persentase penyelesaian (0-100)
+  quizScores            String   // JSON array skor kuis
+  lastAccessed          DateTime @default(now())
+  
+  @@unique([moduleId, userSession])
+  @@map("user_progress")
+}
+
+// Model untuk proyek Arduino
+model ArduinoProject {
+  id          Int      @id @default(autoincrement())
+  name        String   // Nama proyek
+  code        String   // Kode Arduino
+  pinConfig   String   // Konfigurasi pin (JSON)
+  createdAt   DateTime @default(now())
+  modifiedAt  DateTime @updatedAt
+  
+  @@map("arduino_projects")
+}
+
+// Model untuk konfigurasi sistem
+model SystemConfig {
+  id            Int      @id @default(autoincrement())
+  configKey     String   @unique // Kunci konfigurasi
+  configValue   String   // Nilai konfigurasi (JSON)
+  description   String?  // Deskripsi konfigurasi
+  updatedAt     DateTime @updatedAt
+  
+  @@map("system_config")
+}
