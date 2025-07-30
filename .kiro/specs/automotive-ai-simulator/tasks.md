@@ -57,7 +57,8 @@
   - Create AI analysis results persistence and historical tracking
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
 
-- [ ] 6. Core UI Layout and Navigation
+- [-] 6. Core UI Layout and Navigation
+
   - Create main application layout with responsive navigation tabs
   - Implement dark/light theme system using next-themes
   - Build dashboard layout with sensor panels, AI detection panel, and charts area
