@@ -20,6 +20,10 @@ import { ArduinoCodeEditor } from "@/components/arduino/arduino-code-editor"
 import { ArduinoPinConfig } from "@/components/arduino/arduino-pin-config"
 import { SerialMonitor } from "@/components/arduino/serial-monitor"
 import { ArduinoProjectManager } from "@/components/arduino/arduino-project-manager"
+import { LearningModuleContent } from "@/components/learning/learning-module-content"
+import { LearningProgressTracker } from "@/components/learning/learning-progress-tracker"
+import { SimulationIntegration, SIMULATION_PRESETS } from "@/components/learning/simulation-integration"
+import { WokwiProjectGallery } from "@/components/learning/wokwi-project-gallery"
 import {
   Gauge,
   Brain,
@@ -31,7 +35,8 @@ import {
   Zap,
   Wrench,
   Bell,
-  Menu
+  Menu,
+  TrendingUp
 } from "lucide-react"
 
 interface NavigationItem {
@@ -330,16 +335,72 @@ export function AIDetectionContent() {
 }
 
 export function LearningContent() {
+  const [selectedModule, setSelectedModule] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<'modules' | 'wokwi' | 'progress'>('modules')
+
   return (
     <div className="container mx-auto px-4 py-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Modul Pembelajaran</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Materi pembelajaran interaktif akan ditampilkan di sini.</p>
-        </CardContent>
-      </Card>
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight mb-2">Sistem Pembelajaran Interaktif</h2>
+          <p className="text-muted-foreground">
+            Pelajari sistem otomotif melalui teori, simulasi, dan praktik coding Arduino
+          </p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex items-center space-x-1 bg-muted p-1 rounded-lg w-fit">
+          <Button
+            variant={activeTab === 'modules' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setActiveTab('modules')}
+            className="rounded-md"
+          >
+            <BookOpen className="h-4 w-4 mr-2" />
+            Modul Pembelajaran
+          </Button>
+          <Button
+            variant={activeTab === 'wokwi' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setActiveTab('wokwi')}
+            className="rounded-md"
+          >
+            <Cpu className="h-4 w-4 mr-2" />
+            Proyek Wokwi
+          </Button>
+          <Button
+            variant={activeTab === 'progress' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => setActiveTab('progress')}
+            className="rounded-md"
+          >
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Progress
+          </Button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'modules' && (
+          <LearningModuleContent
+            moduleId={selectedModule || undefined}
+            onModuleComplete={(moduleId) => {
+              console.log(`Module ${moduleId} completed!`)
+            }}
+          />
+        )}
+
+        {activeTab === 'wokwi' && (
+          <WokwiProjectGallery
+            onProjectSelect={(projectId) => {
+              console.log(`Wokwi project ${projectId} selected!`)
+            }}
+          />
+        )}
+
+        {activeTab === 'progress' && (
+          <LearningProgressTracker />
+        )}
+      </div>
     </div>
   )
 }

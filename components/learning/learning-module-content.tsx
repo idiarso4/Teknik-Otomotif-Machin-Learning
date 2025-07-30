@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
-import { 
-  BookOpen, 
-  Play, 
-  CheckCircle, 
-  Clock, 
+import {
+  BookOpen,
+  Play,
+  CheckCircle,
+  Clock,
   Award,
   ChevronRight,
   ChevronLeft,
@@ -18,8 +18,10 @@ import {
   Wrench,
   Zap,
   Thermometer,
-  Gauge
+  Gauge,
+  Cpu
 } from "lucide-react"
+import { WokwiSimulator, WOKWI_PROJECTS } from "./wokwi-simulator"
 import { cn } from "@/lib/utils"
 
 export interface LearningModule {
@@ -37,11 +39,12 @@ export interface LearningModule {
 export interface LearningSection {
   id: string
   title: string
-  type: 'theory' | 'simulation' | 'code' | 'quiz'
+  type: 'theory' | 'simulation' | 'code' | 'quiz' | 'wokwi'
   content: string
   images?: string[]
   codeExample?: string
   simulationConfig?: any
+  wokwiProjectId?: string
   completed: boolean
 }
 
@@ -136,6 +139,14 @@ void loop() {
 }
         `,
         completed: false
+      },
+      {
+        id: "electrical-wokwi",
+        title: "Praktik dengan Wokwi Simulator",
+        type: "wokwi",
+        content: "Praktik langsung monitoring voltase baterai menggunakan simulator Wokwi",
+        wokwiProjectId: "battery-voltage-monitor",
+        completed: false
       }
     ]
   },
@@ -189,6 +200,14 @@ Sistem pendingin menjaga suhu mesin dalam rentang operasi yang optimal.
           parameters: ["engineTemp"],
           targetRange: [80, 95]
         },
+        completed: false
+      },
+      {
+        id: "cooling-wokwi",
+        title: "Praktik Monitoring Suhu dengan Wokwi",
+        type: "wokwi",
+        content: "Praktik monitoring suhu mesin menggunakan sensor DS18B20 di Wokwi",
+        wokwiProjectId: "engine-temp-monitor",
         completed: false
       }
     ]
@@ -308,6 +327,30 @@ export function LearningModuleContent({ moduleId, onModuleComplete }: LearningMo
             </div>
           </div>
         )
+      case 'wokwi':
+        const wokwiProject = section.wokwiProjectId ?
+          WOKWI_PROJECTS.find(p => p.id === section.wokwiProjectId) : null
+        return (
+          <div className="space-y-4">
+            <div className="prose dark:prose-invert max-w-none">
+              <p>{section.content}</p>
+            </div>
+            {wokwiProject ? (
+              <WokwiSimulator
+                project={wokwiProject}
+                embedded={true}
+                onProjectComplete={(projectId) => {
+                  completeSection(selectedModule.id, section.id)
+                }}
+              />
+            ) : (
+              <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
+                <Cpu className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground">Proyek Wokwi tidak ditemukan</p>
+              </div>
+            )}
+          </div>
+        )
       default:
         return <div>{section.content}</div>
     }
@@ -410,6 +453,7 @@ export function LearningModuleContent({ moduleId, onModuleComplete }: LearningMo
               {currentSection.type === 'theory' && <BookOpen className="h-5 w-5" />}
               {currentSection.type === 'simulation' && <Play className="h-5 w-5" />}
               {currentSection.type === 'code' && <Lightbulb className="h-5 w-5" />}
+              {currentSection.type === 'wokwi' && <Cpu className="h-5 w-5" />}
               {currentSection.title}
             </CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
